@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Web uygulamasındaki bg değişkeniyle aynı: açılışta beyaz/siyah parlama olmasın -->
+    <color name="window_bg">#F4F2ED</color>
+    <bool name="light_bars">true</bool>
+</resources>

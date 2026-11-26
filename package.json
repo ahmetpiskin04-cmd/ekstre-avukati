@@ -1,0 +1,38 @@
+{
+  "name": "ekstre-avukati",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "tsx --conditions=react-server --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "android:web": "node scripts/build-android-web.mjs",
+    "android:apk": "node scripts/build-apk.mjs",
+    "android:serve": "node scripts/update-server.mjs"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "lucide-react": "^1.77.0",
+    "next": "16.4.6",
+    "papaparse": "^5.7.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
+    "unpdf": "^2.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}

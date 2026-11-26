@@ -1,0 +1,380 @@
+@import "tailwindcss";
+
+/* Sınıf tabanlı koyu tema: <html class="dark"> (layout'taki betik sistem tercihine göre ayarlar) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Tasarım tokenları — "Soft UI": sıcak zemin, kenarsız yumuşak gölgeli kartlar,
+ * bol yuvarlak köşe. Metin renkleri 4.5:1 karşıtlık için seçildi.
+ * Ana düğmeler koyu mürekkep (ink); zümrüt yalnızca olumlu vurgu/tasarruf rengi.
+ */
+:root {
+  --bg: #f4f2ed;
+  --surface: #ffffff;
+  --surface-2: #f7f6f2;
+  --surface-3: #eeece6;
+  --line: rgba(40, 32, 20, 0.07);
+  --line-strong: rgba(40, 32, 20, 0.13);
+  --ink: #1c1b21;
+  --ink-2: #4a4853;
+  --muted: #74717c;
+  --accent: #0b7a55;
+  --accent-soft: rgba(16, 185, 129, 0.11);
+  --brand: #10b981;
+  --brand-ink: #04281c;
+  --good: #0b7a55;
+  --warn: #a95a06;
+  --warn-fill: #f5a524;
+  --bad: #d61f4d;
+  --bad-fill: #f2557a;
+  --shadow-soft: 0 1px 2px rgba(40, 32, 20, 0.04), 0 6px 16px -6px rgba(40, 32, 20, 0.08), 0 22px 44px -22px rgba(40, 32, 20, 0.12);
+  --shadow-lift: 0 2px 4px rgba(40, 32, 20, 0.05), 0 14px 32px -10px rgba(40, 32, 20, 0.16);
+  --hero-from: #e3f6ec;
+  --hero-via: #eef4fb;
+  --hero-to: #fbefe6;
+
+  /* Kategori serileri: dataviz referans paleti, validate_palette.js ile doğrulandı (açık zemin #ffffff) */
+  --cat-1: #2a78d6;
+  --cat-2: #eb6834;
+  --cat-3: #1baf7a;
+  --cat-4: #eda100;
+  --cat-5: #e87ba4;
+  --cat-6: #008300;
+  --cat-7: #6250d6;
+  --cat-other: #b4b1ba;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #131217;
+  --surface: #1c1b21;
+  --surface-2: #232229;
+  --surface-3: #2c2b33;
+  --line: rgba(255, 255, 255, 0.06);
+  --line-strong: rgba(255, 255, 255, 0.12);
+  --ink: #f3f2f7;
+  --ink-2: #c8c6d1;
+  --muted: #9b98a6;
+  --accent: #4ade9b;
+  --accent-soft: rgba(74, 222, 155, 0.12);
+  --brand: #34d399;
+  --brand-ink: #04281c;
+  --good: #4ade9b;
+  --warn: #fbbf4a;
+  --warn-fill: #f5a524;
+  --bad: #fb7194;
+  --bad-fill: #f2557a;
+  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 10px 30px -12px rgba(0, 0, 0, 0.55);
+  --shadow-lift: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 18px 40px -14px rgba(0, 0, 0, 0.7);
+  --hero-from: #17352a;
+  --hero-via: #1e2333;
+  --hero-to: #33232a;
+
+  /* Aynı sekiz ton, koyu zemin (#1c1b21) için basamaklanmış; doğrulandı */
+  --cat-1: #3987e5;
+  --cat-2: #d95926;
+  --cat-3: #199e70;
+  --cat-4: #c98500;
+  --cat-5: #d55181;
+  --cat-6: #0ca30c;
+  --cat-7: #9085e9;
+  --cat-other: #5b5965;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  /* Geriye uyumluluk: eski "accent-ink" (dolgu üstü metin) artık brand-ink */
+  --color-accent-ink: var(--brand-ink);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-warn-fill: var(--warn-fill);
+  --color-bad: var(--bad);
+  --color-bad-fill: var(--bad-fill);
+  --shadow-card: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+  --font-sans: var(--font-sans-ui);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans-ui), system-ui, sans-serif;
+  /* Para, yüzde, tarih ve kart maskeleri her yerde eş aralıklı rakamla hizalansın */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.006em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sayfa arka planı: üstte çok yumuşak pastel bulutlar (ızgara/neon yok) */
+.hero-glow {
+  background:
+    radial-gradient(42rem 22rem at 12% -6rem, color-mix(in oklab, var(--hero-from) 85%, transparent), transparent 70%),
+    radial-gradient(38rem 20rem at 88% -8rem, color-mix(in oklab, var(--hero-to) 80%, transparent), transparent 70%),
+    var(--bg);
+}
+
+/* Özet ana kartı: pastel geçiş */
+.hero-card {
+  background:
+    radial-gradient(120% 140% at 0% 0%, var(--hero-from), transparent 55%),
+    radial-gradient(120% 140% at 100% 100%, var(--hero-to), transparent 55%),
+    var(--hero-via);
+}
+
+/* Yatay kaydırılabilir şeritlerde kaydırma çubuğunu gizle (içerik klavye/dokunmayla erişilebilir) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-up {
+  animation: fade-up 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Doluluk/dağılım çubukları ilk çizimde soldan dolar (transform: düzen kaydırmaz) */
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.animate-grow-x {
+  transform-origin: left center;
+  animation: grow-x 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hareket katmanı — yalnızca transform/opacity (düzen kaydırmaz)       */
+/* ------------------------------------------------------------------ */
+
+/* Yumuşak yaylanma eğrisi */
+:root {
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Kademeli giriş: alt öğeler sırayla süzülür (--i: sıra numarası) */
+/* "translate" ayrı özellik: bittiğinde kartların transform tabanlı eğimini ezmez */
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.stagger > * {
+  animation: rise 560ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+/* --i verilmemişse sıra numarası konumdan gelir */
+.stagger > :nth-child(2) { --i: 1; }
+.stagger > :nth-child(3) { --i: 2; }
+.stagger > :nth-child(4) { --i: 3; }
+.stagger > :nth-child(5) { --i: 4; }
+.stagger > :nth-child(6) { --i: 5; }
+.stagger > :nth-child(7) { --i: 6; }
+.stagger > :nth-child(8) { --i: 7; }
+.stagger > :nth-child(9) { --i: 8; }
+
+/* Yükleme ikonu: yavaşça süzülür */
+@keyframes bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -5px;
+  }
+}
+.animate-bob {
+  animation: bob 2.8s ease-in-out infinite;
+}
+
+/* Özet kartındaki ışık lekelerinin yavaş süzülmesi */
+@keyframes float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: -18px 14px;
+  }
+}
+
+/* Üzerine gelince yükselen, basınca içe göçen kart */
+.lift {
+  transition:
+    transform 320ms var(--ease-spring),
+    box-shadow 320ms var(--ease-out);
+  will-change: transform;
+}
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+  }
+}
+.lift:active {
+  transform: translateY(-1px) scale(0.985);
+  transition-duration: 120ms;
+}
+
+/* Basınca hafif içe göçen düğmeler (grafik segmentleri hariç) */
+button:not(:disabled):not(.no-press) {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+}
+button:not(:disabled):not(.no-press):active {
+  transform: scale(0.96);
+  transition-duration: 90ms;
+}
+
+/* Fareyi takip eden 3B eğim + ışık (değerleri JS --rx/--ry/--mx/--my ile verir) */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--ty, 0px));
+  transition: transform 420ms var(--ease-spring), box-shadow 320ms var(--ease-out);
+  transform-style: preserve-3d;
+}
+.tilt[data-active="true"] {
+  transition: transform 90ms linear, box-shadow 320ms var(--ease-out);
+  box-shadow: var(--shadow-lift);
+}
+.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+  background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.35), transparent 45%);
+  mix-blend-mode: soft-light;
+}
+.dark .tilt::after {
+  background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.09), transparent 45%);
+  mix-blend-mode: normal;
+}
+.tilt[data-active="true"]::after {
+  opacity: 1;
+}
+
+/* Tıklayınca dönen kart: iki yüz aynı ızgara hücresinde (yükseklik içeriğe göre) */
+.flip {
+  perspective: 1200px;
+}
+.flip-inner {
+  display: grid;
+  /* Izgara satırı uzun bir komşu kart yüzünden uzarsa yüzler de uzasın (gölge boşlukta kalmasın) */
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 700ms var(--ease-spring);
+}
+.flip-inner > * {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+.flip[data-flipped="true"] .flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* Yükseklik animasyonlu açılır içerik (grid 0fr → 1fr) */
+.expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms var(--ease-out), opacity 300ms var(--ease-out);
+  opacity: 0;
+}
+.expand[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.expand > * {
+  overflow: hidden;
+}
+
+/* Liste satırları: üzerine gelince hafif sağa kayar */
+.nudge {
+  transition: transform 260ms var(--ease-spring), background-color 200ms var(--ease-out);
+}
+@media (hover: hover) {
+  .nudge:hover {
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .tilt,
+  .lift:hover,
+  .nudge:hover {
+    transform: none !important;
+  }
+  .stagger > * {
+    animation: none;
+  }
+}
+
+/* Yazdırılabilir rapor: tema ne olursa olsun beyaz kâğıt, siyah mürekkep */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .hero-glow,
+  .dark .hero-glow {
+    background: none !important;
+  }
+}

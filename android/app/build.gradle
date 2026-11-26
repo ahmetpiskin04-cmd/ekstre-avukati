@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+}
+
+// İmza bilgileri proje DIŞINDA durur (depoya/OneDrive'a girmesin): ~/.ekstre/android-signing.properties
+def signing = new Properties()
+def signingFile = new File(System.getProperty('user.home'), '.ekstre/android-signing.properties')
+if (signingFile.exists()) signingFile.withInputStream { signing.load(it) }
+
+android {
+    namespace 'com.ekstreavukati.app'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.ekstreavukati.app'
+        minSdk 26
+        targetSdk 34
+        versionCode 2
+        versionName '1.1'
+    }
+
+    // ÖNEMLİ: Android varsayılan olarak "_" ile başlayan klasörleri ve "." ile başlayan dosyaları
+    // asset paketine ALMAZ; Next'in tüm JS/CSS'i "_next/" altında olduğu için uygulama boş açılırdı.
+    // Varsayılan desenden "<dir>_*" ve ".*" kuralları çıkarıldı.
+    androidResources {
+        ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~'
+    }
+
+    signingConfigs {
+        release {
+            if (signing.getProperty('storeFile')) {
+                storeFile file(signing.getProperty('storeFile'))
+                storePassword signing.getProperty('storePassword')
+                keyAlias signing.getProperty('keyAlias')
+                keyPassword signing.getProperty('keyPassword')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        checkReleaseBuilds = false
+    }
+}
